@@ -1,7 +1,6 @@
 package com.example.talkbox;
 
 import static com.example.talkbox.R.id.loginNow;
-import static com.example.talkbox.R.id.registerNowButton;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -30,7 +29,7 @@ public class Register extends AppCompatActivity {
 
         final EditText fullName = findViewById(R.id.fullname);
         final EditText email = findViewById(R.id.email);
-        final EditText phone = findViewById(R.id.phone);
+        final EditText phone = findViewById(R.id.fullname);
         final EditText password = findViewById(R.id.password);
         final EditText conPassword = findViewById(R.id.conPassword);
 

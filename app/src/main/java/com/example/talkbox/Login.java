@@ -2,7 +2,6 @@ package com.example.talkbox;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatButton;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -30,7 +29,7 @@ public class Login extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        final EditText phone = findViewById(R.id.phone);
+        final EditText phone = findViewById(R.id.fullname);
         final EditText password = findViewById(R.id.password);
         final Button loginBtn = findViewById(R.id.loginBtn);
         final TextView registerNowBtn = findViewById(R.id.registerNowButton);
@@ -58,7 +57,7 @@ public class Login extends AppCompatActivity {
                                     Toast.makeText(Login.this, "Login Successfully", Toast.LENGTH_SHORT).show();
 
                                     InformationCustom.phoneNumber = phoneTxt.toString();
-                                    startActivity(new Intent(Login.this,Menu.class));
+                                    startActivity(new Intent(Login.this, MainMenu.class));
                                     finish();
                                 }
                                 else {
