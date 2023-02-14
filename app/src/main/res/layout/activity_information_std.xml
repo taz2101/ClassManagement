@@ -212,10 +212,18 @@
                                 android:textSize="18sp"
                                 android:textStyle="bold" />
 
+                            <Button
+                                android:id="@+id/sendTextToStd"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="3.0"
+                                android:text="Send Text" />
+
                             <CheckBox
                                 android:id="@+id/isAbsent"
                                 android:layout_width="77dp"
                                 android:layout_height="wrap_content" />
+
                         </LinearLayout>
 
                     </LinearLayout>

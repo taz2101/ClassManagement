@@ -11,7 +11,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.Activity;
 import android.content.Intent;
 import android.icu.text.SimpleDateFormat;
+import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -34,6 +36,7 @@ public class informationStd extends AppCompatActivity {
     public static  String mssv;
     public static int count = 0 ;
 
+    public String sdtGet;
 
 
     @Override
@@ -43,17 +46,40 @@ public class informationStd extends AppCompatActivity {
         showInformation(mssv);
         Button backBtn = findViewById(R.id.backButton);
 
+        Button send = findViewById(R.id.sendTextToStd);
 
 
         backBtn.setOnClickListener(view -> {
             startActivity(new Intent(informationStd.this,Group.class));
             finish();
         });
+        send.setOnClickListener(view -> {
+            getSdt(mssv);
+            //sendText("111","nghi");
+
+        });
         showAbsent(mssv);
+
 
        // String imageID =
 
 
+    }
+    public void getSdt(String mssv){
+        databaseReference.child("users").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                String getSdt = snapshot.child(mssv).child("sdt").getValue(String.class);
+                makeText(informationStd.this, getSdt, Toast.LENGTH_SHORT).show();
+                sendText(getSdt,"Sao hom nay khong di hoc");
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
     public void showInformation(String mssv){
 
@@ -61,7 +87,6 @@ public class informationStd extends AppCompatActivity {
         Date date = new Date();
         SimpleDateFormat ft = new SimpleDateFormat("d M");
         TextView textFullName = findViewById(R.id.textFullName);
-
         TextView textID = findViewById(R.id.textID);
         CheckBox checkAbsent = findViewById(R.id.isAbsent);
         TextView fullname = findViewById(R.id.fullname);
@@ -159,7 +184,6 @@ public class informationStd extends AppCompatActivity {
                         count=0;
 
 
-
                     }
 
                     @Override
@@ -178,7 +202,13 @@ public class informationStd extends AppCompatActivity {
 
 
     }
-
+    public void sendText(String number,String text){
+        String smsNumber = String.format("smsto: %s",number);
+        Intent smsIntent = new Intent(Intent.ACTION_SENDTO);
+        smsIntent.setData(Uri.parse(smsNumber));
+        smsIntent.putExtra("sms_body", text);
+        startActivity(smsIntent);
+    }
 
 
 
