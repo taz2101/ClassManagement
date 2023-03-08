@@ -3,7 +3,10 @@ package com.example.talkbox;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -73,16 +76,21 @@ public class LoginToApp extends AppCompatActivity {
                     });
 
                 }
-            }
-        });
+                if (!isNetworkAvailable()){
 
-        registerNowBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(LoginToApp.this,Register.class));
+                    Toast.makeText(LoginToApp.this, "No internet", Toast.LENGTH_SHORT).show();
+                }
+            }
+            private boolean isNetworkAvailable() {
+                ConnectivityManager connectivityManager
+                        = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+                NetworkInfo activeNetworkInfo = connectivityManager != null ? connectivityManager.getActiveNetworkInfo() : null;
+                return activeNetworkInfo != null && activeNetworkInfo.isConnected();
             }
         });
     }
+
+
 
 
 }

@@ -53,7 +53,6 @@ public class ListStudent extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_student);
 
-
         listClass(childOfdataBase);
 
         Button backBtn = findViewById(R.id.backToMenu);

@@ -1,4 +1,5 @@
 package com.example.talkbox;
+
 import static android.widget.Toast.makeText;
 
 import java.util.ArrayList;
@@ -12,14 +13,19 @@ import android.app.Activity;
 import android.content.Intent;
 import android.icu.text.SimpleDateFormat;
 import android.net.Uri;
+import android.nfc.Tag;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -33,10 +39,10 @@ public class informationStd extends AppCompatActivity {
 
     StorageReference storageReference;
 
-    public static  String mssv;
-    public static int count = 0 ;
+    public static String mssv;
+    public static int count = 0;
 
-    public String sdtGet;
+    private static final String TAG = "MyActivity";
 
 
     @Override
@@ -46,51 +52,98 @@ public class informationStd extends AppCompatActivity {
         showInformation(mssv);
         Button backBtn = findViewById(R.id.backButton);
 
-        Button send = findViewById(R.id.sendTextToStd);
-
-
-        backBtn.setOnClickListener(view -> {
-            startActivity(new Intent(informationStd.this,Group.class));
-            finish();
+        Button editInfor = findViewById(R.id.confirmEditBtn);
+        editInfor.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editStudentInformation(mssv);
+            }
         });
-        send.setOnClickListener(view -> {
-            getSdt(mssv);
-            //sendText("111","nghi");
-
+        backBtn.setOnClickListener(view -> {
+            startActivity(new Intent(informationStd.this, Group.class));
+            finish();
         });
         showAbsent(mssv);
 
+        Button sendText = findViewById(R.id.sendTextToStd);
+        sendText.setOnClickListener(View -> {
 
-       // String imageID =
+            databaseReference.child("users").child(mssv).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                  String sdt = snapshot.child("sdt").getValue(String.class);
+                  sendText(sdt,"tai sao hom nay nghi hoc");
+                }
 
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
 
-    }
-    public void getSdt(String mssv){
-        databaseReference.child("users").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-
-                String getSdt = snapshot.child(mssv).child("sdt").getValue(String.class);
-                makeText(informationStd.this, getSdt, Toast.LENGTH_SHORT).show();
-                sendText(getSdt,"Sao hom nay khong di hoc");
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
+                }
+            });
         });
     }
-    public void showInformation(String mssv){
+
+    public void editStudentInformation(String mssv) {
+        //lay ra cac element can dung
+        EditText textFullName = findViewById(R.id.textFullName);
+        EditText textID = findViewById(R.id.textID);
+
+//        Boolean isUpdated;
+//        Boolean isMssvUpdated;
+//        Log.d(TAG, textFullName.getText().toString());
+        // set gia tri moi cho fullName + 2 calllback function
+        databaseReference.child("users").child(mssv).child("fullName").setValue(textFullName.getText().toString())
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        // Write was successful!
+                        // ...
+                        Log.d(TAG,"Edit name successfully");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        // Write failed
+                        // ...
+                        Log.d(TAG,"Edit name fail");
+                    }
+                });
+        // set new id for student
+        databaseReference.child("users").child(mssv).child("mssv").setValue(Integer.parseInt(textID.getText().toString()))
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        // Write was successful!
+                        // ...
+                        Log.d(TAG,"Edit Mssv successfully");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        // Write failed
+                        // ...
+                        Log.d(TAG,"Edit Mssv fail");
+                    }
+                });
+        makeText(informationStd.this, "Chỉnh sửa thông tin sinh viên thành công", Toast.LENGTH_SHORT).show();
+        startActivity(new Intent(informationStd.this, Group.class));
+    }
+
+    ;
+
+    public void showInformation(String mssv) {
 
 
         Date date = new Date();
         SimpleDateFormat ft = new SimpleDateFormat("d M");
-        TextView textFullName = findViewById(R.id.textFullName);
-        TextView textID = findViewById(R.id.textID);
+        EditText textFullName = findViewById(R.id.textFullName);
+
+        EditText textID = findViewById(R.id.textID);
         CheckBox checkAbsent = findViewById(R.id.isAbsent);
         TextView fullname = findViewById(R.id.fullname);
-
+//        EditText nameInput = findViewById(R.id.nameInput);
 
         databaseReference.child("users").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -101,18 +154,18 @@ public class informationStd extends AppCompatActivity {
                 fullname.setText(snapshot.child(mssv).child("fullName").getValue(String.class));
                 textID.setText(mssv);
 
+//                nameInput.setText(snapshot.child(mssv).child("fullName").getValue(String.class));
                 databaseReference.child("Week").addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                        if(snapshot.hasChild(ft.format(date))){
+                        if (snapshot.hasChild(ft.format(date))) {
 
-                            if(snapshot.child(ft.format(date)).hasChild(name)){
+                            if (snapshot.child(ft.format(date)).hasChild(name)) {
                                 checkAbsent.setChecked(true);
 
                             }
-                        }
-                        else {
+                        } else {
                             makeText(informationStd.this, "Hom nay khong co buoi hoc", Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -122,35 +175,34 @@ public class informationStd extends AppCompatActivity {
 
                     }
                 });
-                    checkAbsent.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                        @Override
-                        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                            //makeText(informationStd.this, ft.format(date), Toast.LENGTH_SHORT).show();
-                            if(checkAbsent.isChecked()){
-                                databaseReference.child("Week").addListenerForSingleValueEvent(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                        if(snapshot.hasChild(ft.format(date))){
-                                            if(snapshot.child(ft.format(date)).hasChild(name)){
-                                                makeText(informationStd.this, "Da them roi", Toast.LENGTH_SHORT).show();
-                                            }
-                                            else{
-                                                databaseReference.child("Week").child(ft.format(date)).child(name).setValue(mssv);
-                                            }
+                checkAbsent.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                        //makeText(informationStd.this, ft.format(date), Toast.LENGTH_SHORT).show();
+                        if (checkAbsent.isChecked()) {
+                            databaseReference.child("Week").addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    if (snapshot.hasChild(ft.format(date))) {
+                                        if (snapshot.child(ft.format(date)).hasChild(name)) {
+                                            makeText(informationStd.this, "Da them roi", Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            databaseReference.child("Week").child(ft.format(date)).child(name).setValue(mssv);
                                         }
                                     }
-                                    @Override
-                                    public void onCancelled(@NonNull DatabaseError error) {
+                                }
 
-                                    }
-                                });
-                            }
-                            else {
-                                databaseReference.child("Week").child(ft.format(date)).child(name).removeValue();
-                            }
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
 
+                                }
+                            });
+                        } else {
+                            databaseReference.child("Week").child(ft.format(date)).child(name).removeValue();
                         }
-                    });
+
+                    }
+                });
 
             }
 
@@ -160,7 +212,8 @@ public class informationStd extends AppCompatActivity {
             }
         });
     }
-    public void showAbsent(String mssv){
+
+    public void showAbsent(String mssv) {
 
         databaseReference.child("users").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -181,7 +234,7 @@ public class informationStd extends AppCompatActivity {
                         }
                         TextView absent = findViewById(R.id.textShowAbsent);
                         absent.setText(Integer.toString(count));
-                        count=0;
+                        count = 0;
 
 
                     }
@@ -200,7 +253,6 @@ public class informationStd extends AppCompatActivity {
         });
 
 
-
     }
     public void sendText(String number,String text){
         String smsNumber = String.format("smsto: %s",number);
@@ -209,6 +261,7 @@ public class informationStd extends AppCompatActivity {
         smsIntent.putExtra("sms_body", text);
         startActivity(smsIntent);
     }
+
 
 
 

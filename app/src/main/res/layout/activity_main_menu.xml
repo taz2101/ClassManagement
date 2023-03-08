@@ -33,14 +33,14 @@
 
         <ImageView
             android:id="@+id/backMainMenu"
-            android:layout_width="137dp"
-            android:layout_height="111dp"
+            android:layout_width="150dp"
+            android:layout_height="151dp"
             android:layout_marginEnd="32dp"
             app:layout_constraintBottom_toBottomOf="@+id/imageView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.32"
-            app:srcCompat="@drawable/avatar" />
+            app:srcCompat="@drawable/backgroundavatar" />
 
         <TextView
             android:id="@+id/textView"
@@ -102,7 +102,7 @@
                     android:id="@+id/txt5"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Call"
+                    android:text="Video"
                     android:textAlignment="center"
                     android:textColor="#7182ef"
                     android:textStyle="bold|italic" />

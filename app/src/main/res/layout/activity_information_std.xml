@@ -43,11 +43,11 @@
                         android:layout_width="210dp"
                         android:layout_height="137dp"
                         android:layout_marginTop="48dp"
+                        android:background="@drawable/ic_baseline_account_box_24"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.497"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        />
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
                         android:id="@+id/fullname"
@@ -56,7 +56,7 @@
                         android:layout_marginTop="16dp"
                         android:text="Full Name"
                         android:textAlignment="center"
-                        android:textColor="@color/white"
+                        android:textColor="@color/purple_700"
                         android:textSize="20sp"
                         android:textStyle="bold"
                         app:layout_constraintEnd_toEndOf="@+id/imageAvatar"
@@ -68,8 +68,8 @@
                         android:id="@+id/email"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Mail"
-                        android:textColor="@color/white"
+                        android:text="Phone"
+                        android:textColor="@color/purple_700"
                         app:layout_constraintEnd_toEndOf="@+id/fullname"
                         app:layout_constraintStart_toStartOf="@+id/fullname"
                         app:layout_constraintTop_toBottomOf="@+id/fullname" />
@@ -94,13 +94,6 @@
                             android:layout_margin="10dp"
                             android:orientation="horizontal"/>
 
-                        <View
-                            android:id="@+id/view"
-                            android:layout_width="match_parent"
-                            android:layout_height="2dp"
-                            android:layout_margin="10dp"
-                            android:background="#D9D9D9" />
-
                         <LinearLayout
                             android:id="@+id/layoutEditFullName"
                             android:layout_width="match_parent"
@@ -117,12 +110,13 @@
                                 android:textSize="18sp"
                                 android:textStyle="bold" />
 
-                            <TextView
+                            <EditText
                                 android:id="@+id/textFullName"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:text="Name"
+                                android:background="@android:color/transparent"
                                 android:textAlignment="textEnd"
                                 android:textColor="#5B5B5B"
                                 android:textSize="18sp"
@@ -186,12 +180,13 @@
                                 android:textSize="18sp"
                                 android:textStyle="bold" />
 
-                            <TextView
+                            <EditText
                                 android:id="@+id/textID"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:text="Abc"
+                                android:background="@android:color/transparent"
                                 android:textAlignment="textEnd"
                                 android:textColor="#5B5B5B"
                                 android:textSize="18sp" />
@@ -212,37 +207,52 @@
                                 android:textSize="18sp"
                                 android:textStyle="bold" />
 
-                            <Button
-                                android:id="@+id/sendTextToStd"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="3.0"
-                                android:text="Send Text" />
-
                             <CheckBox
                                 android:id="@+id/isAbsent"
                                 android:layout_width="77dp"
                                 android:layout_height="wrap_content" />
 
+                            <Button
+                                android:id="@+id/sendTextToStd"
+                                android:layout_width="23dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="3.0"
+                                android:text="Send Text" />
                         </LinearLayout>
 
                     </LinearLayout>
 
                     <Button
                         android:id="@+id/backButton"
-                        android:layout_width="328dp"
-                        android:layout_height="0dp"
+                        android:layout_width="128dp"
+                        android:layout_height="45dp"
                         android:layout_marginStart="24dp"
-                        android:layout_marginTop="15dp"
+                        android:layout_marginTop="12dp"
                         android:layout_marginEnd="24dp"
 
                         android:backgroundTint="@android:color/holo_orange_light"
                         android:text="Back"
                         android:textColor="#FFFF"
                         app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.186"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/linearLayout"/>
+                        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
+                    <Button
+                        android:id="@+id/confirmEditBtn"
+                        android:layout_width="128dp"
+                        android:layout_height="45dp"
+                        android:layout_marginStart="24dp"
+                        android:layout_marginTop="12dp"
+                        android:layout_marginEnd="24dp"
+
+                        android:backgroundTint="@color/teal_200"
+                        android:text="Sửa"
+                        android:textColor="#FFFF"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.821"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -252,3 +262,4 @@
     </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+
